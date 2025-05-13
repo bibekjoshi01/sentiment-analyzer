@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.utils.password import hash_password
+from app.utils.password import hash_password, check_password
+from app.utils.jwt_auth import create_access_token
 from app.database import get_db
 from app.models import User
-from app.schemas.user import UserSignUp, UserSignUpSuccess
+from app.schemas.user import UserSignUp, UserSignUpSuccess, UserLogin, UserLoginSuccess
 
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
@@ -23,13 +24,32 @@ def create_user(db: Session, user: UserSignUp):
 
 
 @router.post("/signup", response_model=UserSignUpSuccess)
-async def user_signup(user: UserSignUp, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.email == user.email).first()
+async def user_signup(payload: UserSignUp, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.email == payload.email).first()
 
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered"
         )
 
-    create_user(db, user)
-    return {"message": "SignUp Successfull"}
+    create_user(db, payload)
+    return UserSignUpSuccess(message="SignUp Successfull")
+
+
+@router.post("/login", response_model=UserLoginSuccess)
+async def user_login(payload: UserLogin, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == payload.email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid email"
+        )
+
+    if not check_password(payload.password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid password"
+        )
+
+    token = create_access_token(data={"sub": user.email, "user_id": user.id})
+
+    return UserLoginSuccess(message="Login successfull", access_token=token)

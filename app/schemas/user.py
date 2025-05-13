@@ -10,3 +10,13 @@ class UserSignUp(BaseModel):
 
 class UserSignUpSuccess(BaseModel):
     message: str
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: Annotated[str, StringConstraints()]
+
+
+class UserLoginSuccess(BaseModel):
+    message: str
+    access_token: str
