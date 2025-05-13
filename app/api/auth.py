@@ -1,14 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer
 
 from app.utils.password import hash_password, check_password
 from app.utils.jwt_auth import create_access_token
 from app.database import get_db
 from app.models import User
-from app.schemas.user import UserSignUp, UserSignUpSuccess, UserLogin, UserLoginSuccess
+from app.schemas.user import (
+    UserSignUp,
+    UserSignUpSuccess,
+    UserLogin,
+    UserLoginSuccess,
+    UserProfileResponse,
+)
 
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 def create_user(db: Session, user: UserSignUp):
@@ -53,3 +61,29 @@ async def user_login(payload: UserLogin, db: Session = Depends(get_db)):
     token = create_access_token(data={"sub": user.email, "user_id": user.id})
 
     return UserLoginSuccess(message="Login successfull", access_token=token)
+
+
+@router.get("/profile", response_model=UserProfileResponse)
+async def user_profile(
+    request: Request,
+    token: str = Depends(oauth2_scheme),
+):
+    """Include Bearer Token in Authorization Headers"""
+
+    user = request.state.user
+
+    if user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    if not user.is_active:
+        raise HTTPException(
+            status_code=403, detail="Account deactivated, contact admin"
+        )
+
+    return UserProfileResponse(
+        id=user.id,
+        full_name=user.full_name,
+        email=user.email,
+        created_at=user.created_at,
+        is_active=user.is_active,
+    )

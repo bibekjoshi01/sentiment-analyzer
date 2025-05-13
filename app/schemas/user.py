@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, StringConstraints
 from typing import Annotated
+from datetime import datetime
 
 
 class UserSignUp(BaseModel):
@@ -20,3 +21,14 @@ class UserLogin(BaseModel):
 class UserLoginSuccess(BaseModel):
     message: str
     access_token: str
+
+
+class UserProfileResponse(BaseModel):
+    id: int
+    full_name: str
+    email: str
+    created_at: datetime
+    is_active: bool
+
+    class Config:
+        orm_mode = True
