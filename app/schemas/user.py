@@ -29,6 +29,3 @@ class UserProfileResponse(BaseModel):
     email: str
     created_at: datetime
     is_active: bool
-
-    class Config:
-        orm_mode = True

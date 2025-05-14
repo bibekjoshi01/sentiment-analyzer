@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.config import settings
-from app.api.analysis import router as api_router
+from app.api.analyzer import router as analyzer_router
 from app.middleware import AuthMiddleware
 from .database import engine
 from app import models
@@ -13,7 +13,7 @@ app.add_middleware(AuthMiddleware)
 
 models.Base.metadata.create_all(bind=engine)
 
-app.include_router(api_router)
+app.include_router(analyzer_router)
 app.include_router(auth_router)
 
 
