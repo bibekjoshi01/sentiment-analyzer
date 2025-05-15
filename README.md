@@ -79,3 +79,9 @@ Sentiment Analyzer is an API built with FastAPI that automatically detects and a
 1. ruff check / ruff check --fix / ruff format
 2. black .
 3. pre-commit run --all-files
+
+## Running Tests
+
+   ```bash
+   pytest -v -s
+
