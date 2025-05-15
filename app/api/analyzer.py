@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile
+from sqlalchemy.orm import Session
 from textblob import TextBlob
 from PIL import Image
 from io import BytesIO
-from sqlalchemy.orm import Session
+from deepface import DeepFace
+import numpy as np
 
 from app.database import get_db
 from app.dependencies import get_current_user, oauth2_scheme
@@ -73,7 +75,7 @@ async def analyze_image_sentiment(
     token: str = Depends(oauth2_scheme),
 ):
 
-    if validate_request_count(db) >= 10:
+    if validate_request_count(db, user) >= 10:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Daily request limit reached (10 per day).",
@@ -81,20 +83,19 @@ async def analyze_image_sentiment(
 
     image = Image.open(BytesIO(await file.read()))
 
-    # try:
-    #     result = DeepFace.analyze(image, actions=["emotion"])
-    #     print("result", result)
-    #     emotion_data = result[0]
-    # except Exception as e:
-    #     raise HTTPException(
-    #         status_code=500, detail=f"Emotion analysis failed: {str(e)}"
-    #     )
+    try:
+        np_image = np.array(image)
+        result = DeepFace.analyze(np_image, actions=["emotion"])
+        emotion_data = result[0]
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Emotion analysis failed: {str(e)}"
+        )
 
     db.add(AnalysisRequest(user_id=user.id))
     db.commit()
-    return {"image": image}
-    # return {
-    #     "dominant_emotion": emotion_data["dominant_emotion"],
-    #     "emotions": emotion_data["emotion"],
-    #     "confidence": emotion_data["emotion"][emotion_data["dominant_emotion"]],
-    # }
+    return {
+        "dominant_emotion": emotion_data["dominant_emotion"],
+        "emotions": emotion_data["emotion"],
+        "confidence": emotion_data["emotion"][emotion_data["dominant_emotion"]],
+    }

@@ -11,6 +11,10 @@ passlib==1.7.4
 cryptography==44.0.3
 bcrypt==3.2.2
 pillow==11.2.1
+opencv-python
+deepface
+tf-keras
+tensorflow==2.12.0
 # Code quality
 # ------------------------------------------------------------------------------
 black==25.1.0
