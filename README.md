@@ -1,6 +1,6 @@
 # Sentiment Analyzer
 
-AI-Powered Sentiment Analyzer API with FastAPI under the Fuse AI Fellowship and Follows the 12-Factor App principles.
+Sentiment Analyzer is an API built with FastAPI that automatically detects and analyzes the emotional tone and sentiment from text or images. The project follows modern best practices like the 12-Factor App principles to ensure scalability, maintainability, and ease of deployment, whether running locally or in containerized environments.
 
 ---
 
