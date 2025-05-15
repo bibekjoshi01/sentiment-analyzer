@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Dict
 
 
 class TextIn(BaseModel):
@@ -9,3 +10,9 @@ class SentimentOut(BaseModel):
     sentiment: str
     polarity: float
     subjectivity: float
+
+
+class EmotionResponse(BaseModel):
+    dominant_emotion: str
+    emotions: Dict[str, float]
+    confidence: float
