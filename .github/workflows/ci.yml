@@ -32,6 +32,11 @@ jobs:
 
             - name: Run tests
               run: pytest
+              env:
+                APP_NAME: "Sentiment Analyzer"
+                APP_VERSION: "1.0.0"
+                DATABASE_URL: "sqlite:///./test.db"
+                SECRET_KEY: "testing-secret-key"
 
     build-docker:
         runs-on: ubuntu-latest
