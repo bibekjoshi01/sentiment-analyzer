@@ -27,13 +27,13 @@ Sentiment Analyzer is an API built with FastAPI that automatically detects and a
     python -m venv venv
     venv\Scripts\activate
    ```
-    
+
     ```bash
     # On macOS/Linux
     python3 -m venv venv
     source venv/bin/activate
    ```
-    
+
   3. Install Dependencies
 
      ```bash
@@ -88,4 +88,3 @@ Sentiment Analyzer is an API built with FastAPI that automatically detects and a
 
    ```bash
    pytest -v -s
-
