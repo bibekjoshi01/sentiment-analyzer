@@ -36,9 +36,34 @@ AI-Powered Sentiment Analyzer API with FastAPI under the Fuse AI Fellowship and 
      pip install -r requirements.txt
 
   4. Setup *.env* file (create from .env.example and fill in required variables)
-  5. Start the FastAPI Server
+     
+  6. Start the FastAPI Server
 
      ```bash
      uvicorn app.main:app --reload
 
   **The app will be available at http://localhost:8000**
+
+## Running with Docker
+
+1. Clone the repo
+
+   ```bash
+   git clone https://github.com/bibekjoshi01/sentiment-analyzer
+   cd sentiment-analyzer
+
+2. Create a *.env* file in the project root with required variables (see .env.example).
+   
+4. Build the docker image
+   
+   ```bash
+   docker build -t sentiment-analyzer .
+   
+5. Run the docker container
+   
+   ```bash
+   docker run -p 8000:8000 sentiment-analyzer
+
+**The app will be available at http://localhost:8000**
+
+**Note:** To stop the Docker container, use docker ps to find the container ID and then docker stop <container_id>
