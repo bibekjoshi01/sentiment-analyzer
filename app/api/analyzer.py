@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from textblob import TextBlob
 from PIL import Image
 from io import BytesIO
-from deepface import DeepFace
 import numpy as np
 
 from app.database import get_db
@@ -15,6 +14,12 @@ from app.schemas.analyzer import EmotionResponse, SentimentOut, TextIn
 
 
 router = APIRouter(prefix="/api/analyze", tags=["Analyzer"])
+
+
+def get_deepface():
+    from deepface import DeepFace
+
+    return DeepFace
 
 
 def validate_request_count(db: Session, user: User):
@@ -74,6 +79,8 @@ async def analyze_image_sentiment(
     user: User = Depends(get_current_user),
     token: str = Depends(oauth2_scheme),
 ):
+
+    DeepFace = get_deepface()
 
     if validate_request_count(db, user) >= 10:
         raise HTTPException(
