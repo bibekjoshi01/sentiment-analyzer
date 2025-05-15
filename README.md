@@ -44,6 +44,8 @@ AI-Powered Sentiment Analyzer API with FastAPI under the Fuse AI Fellowship and 
 
   **The app will be available at http://localhost:8000**
 
+---
+
 ## Running with Docker
 
 1. Clone the repo
@@ -66,4 +68,7 @@ AI-Powered Sentiment Analyzer API with FastAPI under the Fuse AI Fellowship and 
 
 **The app will be available at http://localhost:8000**
 
-**Note:** To stop the Docker container, use docker ps to find the container ID and then docker stop <container_id>
+**Note:** To stop the Docker container, use docker ps to find the container ID and then
+
+   ```bash
+      docker stop <container_id>
