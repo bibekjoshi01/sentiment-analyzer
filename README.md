@@ -23,16 +23,20 @@ Sentiment Analyzer is an API built with FastAPI that automatically detects and a
 2. Create and activate a virtual environment
 
     ```bash
-    python -m venv venv
     # On Windows
+    python -m venv venv
     venv\Scripts\activate
+   ```
+    
+    ```bash
     # On macOS/Linux
+    python3 -m venv venv
     source venv/bin/activate
-
+   ```
+    
   3. Install Dependencies
 
      ```bash
-     python.exe -m pip install --upgrade pip
      pip install -r requirements.txt
 
   4. Setup *.env* file (create from .env.example and fill in required variables)
