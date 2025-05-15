@@ -34,7 +34,7 @@ jobs:
               run: pytest
 
     build-docker:
-        runs-on: ubuntu-lates
+        runs-on: ubuntu-latest
         needs: lint-test
 
         steps:
