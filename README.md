@@ -70,8 +70,9 @@ Sentiment Analyzer is an API built with FastAPI that automatically detects and a
 
 **Note:** To stop the Docker container, use docker ps to find the container ID and then docker stop <container_id>
 
+---
 
-**Formatting and Linting Code**
+## Formatting and Linting Code
 
    ```pre-commit install```
 
